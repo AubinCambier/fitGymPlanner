@@ -5,6 +5,13 @@
 BEGIN;
 
 -- ========================
+-- RESET (idempotent)
+-- ========================
+
+DROP TABLE IF EXISTS preferences, sanctions, coach_requests, memberships, pricing, bookings, sessions, session_types, users CASCADE;
+DROP TYPE IF EXISTS user_role, payment_mode, membership_status, session_status, booking_status, request_status, sanction_type, intensity_level CASCADE;
+
+-- ========================
 -- TYPES ENUM
 -- ========================
 
