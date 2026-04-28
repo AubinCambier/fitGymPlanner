@@ -1,0 +1,21 @@
+meta {
+  name: Update Me - changer mot de passe
+  type: http
+  seq: 11
+}
+
+put {
+  url: {{baseUrl}}/api/v1/auth/me
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "password": "nouveaumdp123"
+  }
+}

@@ -1,0 +1,17 @@
+meta {
+  name: Update Me - sans token
+  type: http
+  seq: 12
+}
+
+put {
+  url: {{baseUrl}}/api/v1/auth/me
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "first_name": "Alice"
+  }
+}

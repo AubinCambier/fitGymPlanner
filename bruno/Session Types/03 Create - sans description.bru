@@ -1,0 +1,21 @@
+meta {
+  name: Create - sans description
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/session-types
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "name": "CrossFit"
+  }
+}

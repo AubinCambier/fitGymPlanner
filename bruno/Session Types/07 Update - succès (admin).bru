@@ -1,0 +1,22 @@
+meta {
+  name: Update - succès (admin)
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/api/v1/session-types/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "name": "Yoga Flow",
+    "description": "Yoga dynamique"
+  }
+}

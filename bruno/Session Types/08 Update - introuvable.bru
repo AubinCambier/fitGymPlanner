@@ -1,0 +1,21 @@
+meta {
+  name: Update - introuvable
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/api/v1/session-types/9999
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "name": "Inexistant"
+  }
+}

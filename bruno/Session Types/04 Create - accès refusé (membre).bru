@@ -1,0 +1,21 @@
+meta {
+  name: Create - accès refusé (membre)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/session-types
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "name": "Pilates"
+  }
+}

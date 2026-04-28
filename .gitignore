@@ -1,0 +1,19 @@
+# Dépendances
+node_modules/
+
+# Build
+dist/
+
+# Environnement
+.env
+.env.local
+
+# Bruno - environnements (contiennent les tokens)
+bruno/environments/Local.bru
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*

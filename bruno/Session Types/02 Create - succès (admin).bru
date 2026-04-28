@@ -1,0 +1,22 @@
+meta {
+  name: Create - succès (admin)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/session-types
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "name": "Yoga",
+    "description": "Séance de yoga douce"
+  }
+}
