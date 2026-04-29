@@ -1,0 +1,21 @@
+meta {
+  name: Create - accès refusé (coach)
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/v1/bookings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}
+
+body:json {
+  {
+    "session_id": {{sessionId}}
+  }
+}

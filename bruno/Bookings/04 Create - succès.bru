@@ -1,0 +1,27 @@
+meta {
+  name: Create - succès
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/bookings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "session_id": {{sessionId}}
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("bookingId", res.body.data.id);
+  }
+}

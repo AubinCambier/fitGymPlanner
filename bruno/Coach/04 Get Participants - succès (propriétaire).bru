@@ -1,0 +1,15 @@
+meta {
+  name: Get Participants - succès (propriétaire)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/v1/coach/sessions/{{sessionId}}/participants
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}

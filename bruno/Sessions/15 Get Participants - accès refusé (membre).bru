@@ -1,0 +1,15 @@
+meta {
+  name: Get Participants - accès refusé (membre)
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/api/v1/sessions/{{sessionId}}/participants
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

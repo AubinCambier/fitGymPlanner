@@ -1,0 +1,23 @@
+meta {
+  name: Create - succès (à la séance)
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/pricing
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "label": "Séance à l'unité",
+    "payment_mode": "PAY_PER_SESSION",
+    "price": 15.00
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Cancel - déjà annulée
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/bookings/{{bookingId}}/cancel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Update - introuvable
+  type: http
+  seq: 9
+}
+
+put {
+  url: {{baseUrl}}/api/v1/admin/pricing/99999
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "label": "Tarif fantôme"
+  }
+}

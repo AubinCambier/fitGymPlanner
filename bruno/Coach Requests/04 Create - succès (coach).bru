@@ -1,0 +1,28 @@
+meta {
+  name: Create - succès (coach)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/coach/requests
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}
+
+body:json {
+  {
+    "session_id": {{sessionId}},
+    "reason": "Indisponibilité imprévue du coach"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("requestId", res.body.data.id);
+  }
+}

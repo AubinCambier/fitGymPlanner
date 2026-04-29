@@ -1,0 +1,15 @@
+meta {
+  name: Get By Id - succès
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/v1/admin/sanctions/{{sanctionId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}

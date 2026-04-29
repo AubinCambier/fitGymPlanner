@@ -1,0 +1,23 @@
+meta {
+  name: Create - utilisateur introuvable
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/sanctions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "user_id": 99999,
+    "sanction_type": "WARNING",
+    "reason": "Test utilisateur inexistant"
+  }
+}

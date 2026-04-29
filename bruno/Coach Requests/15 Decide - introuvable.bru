@@ -1,0 +1,21 @@
+meta {
+  name: Decide - introuvable
+  type: http
+  seq: 15
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/requests/99999
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "status": "APPROVED"
+  }
+}

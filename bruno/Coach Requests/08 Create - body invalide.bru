@@ -1,0 +1,22 @@
+meta {
+  name: Create - body invalide
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/v1/coach/requests
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}
+
+body:json {
+  {
+    "session_id": "pas-un-nombre",
+    "reason": ""
+  }
+}

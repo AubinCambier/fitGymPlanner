@@ -1,0 +1,25 @@
+meta {
+  name: Create - accès refusé (membre)
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "email": "nouveau@fitgym.com",
+    "password": "password123",
+    "first_name": "Test",
+    "last_name": "User",
+    "role": "COACH"
+  }
+}

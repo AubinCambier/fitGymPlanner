@@ -1,0 +1,22 @@
+meta {
+  name: Subscribe - body invalide
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/v1/memberships
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "pricing_id": "pas-un-nombre",
+    "payment_mode": "INVALIDE"
+  }
+}

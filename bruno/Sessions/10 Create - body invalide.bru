@@ -1,0 +1,22 @@
+meta {
+  name: Create - body invalide
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/api/v1/sessions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "title": "",
+    "session_type_id": "pas-un-nombre"
+  }
+}

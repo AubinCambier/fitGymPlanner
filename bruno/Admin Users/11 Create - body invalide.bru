@@ -1,0 +1,22 @@
+meta {
+  name: Create - body invalide
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "email": "pas-un-email",
+    "password": "123"
+  }
+}

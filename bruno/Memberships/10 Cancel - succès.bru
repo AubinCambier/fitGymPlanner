@@ -1,0 +1,15 @@
+meta {
+  name: Cancel - succès
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/memberships/me/cancel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

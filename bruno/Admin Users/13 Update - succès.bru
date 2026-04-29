@@ -1,0 +1,22 @@
+meta {
+  name: Update - succès
+  type: http
+  seq: 13
+}
+
+put {
+  url: {{baseUrl}}/api/v1/admin/users/{{targetUserId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "first_name": "Marco",
+    "role": "MEMBER"
+  }
+}

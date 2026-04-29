@@ -1,0 +1,15 @@
+meta {
+  name: Get My Bookings - succès
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/bookings
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Create - email déjà utilisé
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "email": "coach2@fitgym.com",
+    "password": "password123",
+    "first_name": "Marc",
+    "last_name": "Dupont",
+    "role": "COACH"
+  }
+}

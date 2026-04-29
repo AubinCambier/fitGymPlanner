@@ -1,0 +1,21 @@
+meta {
+  name: Update - email déjà utilisé
+  type: http
+  seq: 14
+}
+
+put {
+  url: {{baseUrl}}/api/v1/admin/users/{{targetUserId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "email": "membre@fitgym.com"
+  }
+}

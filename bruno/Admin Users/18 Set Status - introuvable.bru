@@ -1,0 +1,21 @@
+meta {
+  name: Set Status - introuvable
+  type: http
+  seq: 18
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/users/99999/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "is_active": false
+  }
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Create - sans token
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/v1/sessions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Yoga du matin",
+    "session_type_id": 1,
+    "coach_id": 2,
+    "start_time": "2026-06-01T09:00:00+00:00",
+    "end_time": "2026-06-01T10:00:00+00:00",
+    "capacity": 15
+  }
+}

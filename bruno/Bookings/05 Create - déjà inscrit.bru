@@ -1,0 +1,21 @@
+meta {
+  name: Create - déjà inscrit
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/v1/bookings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "session_id": {{sessionId}}
+  }
+}

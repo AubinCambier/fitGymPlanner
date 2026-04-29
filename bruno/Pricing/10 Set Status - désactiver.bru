@@ -1,0 +1,21 @@
+meta {
+  name: Set Status - désactiver
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/pricing/{{pricingId}}/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "is_active": false
+  }
+}

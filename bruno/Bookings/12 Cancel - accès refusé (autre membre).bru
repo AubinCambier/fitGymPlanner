@@ -1,0 +1,15 @@
+meta {
+  name: Cancel - accès refusé (autre membre)
+  type: http
+  seq: 12
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/bookings/{{bookingId}}/cancel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}

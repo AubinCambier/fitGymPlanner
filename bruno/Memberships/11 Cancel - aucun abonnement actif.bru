@@ -1,0 +1,15 @@
+meta {
+  name: Cancel - aucun abonnement actif
+  type: http
+  seq: 11
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/memberships/me/cancel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

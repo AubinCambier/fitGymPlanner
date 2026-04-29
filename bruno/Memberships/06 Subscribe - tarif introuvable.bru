@@ -1,0 +1,22 @@
+meta {
+  name: Subscribe - tarif introuvable
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/v1/memberships
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "pricing_id": 99999,
+    "payment_mode": "MONTHLY"
+  }
+}

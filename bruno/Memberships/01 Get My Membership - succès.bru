@@ -1,0 +1,15 @@
+meta {
+  name: Get My Membership - succès
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/memberships/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

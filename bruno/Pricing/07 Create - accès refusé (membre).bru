@@ -1,0 +1,23 @@
+meta {
+  name: Create - accès refusé (membre)
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/pricing
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "label": "Abonnement mensuel",
+    "payment_mode": "MONTHLY",
+    "price": 49.90
+  }
+}

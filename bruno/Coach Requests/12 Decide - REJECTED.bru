@@ -1,0 +1,22 @@
+meta {
+  name: Decide - REJECTED
+  type: http
+  seq: 12
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/requests/{{requestId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "status": "REJECTED",
+    "admin_comment": "La session peut encore être maintenue, un remplaçant est disponible"
+  }
+}

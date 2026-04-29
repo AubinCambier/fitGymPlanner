@@ -1,0 +1,15 @@
+meta {
+  name: Get Participants - session introuvable
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/coach/sessions/99999/participants
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}

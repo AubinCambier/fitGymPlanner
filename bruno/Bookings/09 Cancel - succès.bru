@@ -1,0 +1,15 @@
+meta {
+  name: Cancel - succès
+  type: http
+  seq: 9
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/bookings/{{bookingId}}/cancel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

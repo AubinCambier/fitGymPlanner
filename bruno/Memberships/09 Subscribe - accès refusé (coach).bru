@@ -1,0 +1,22 @@
+meta {
+  name: Subscribe - accès refusé (coach)
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/v1/memberships
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}
+
+body:json {
+  {
+    "pricing_id": {{pricingId}},
+    "payment_mode": "MONTHLY"
+  }
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Update - succès
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/api/v1/admin/pricing/{{pricingId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "label": "Abonnement mensuel premium",
+    "price": 59.90
+  }
+}

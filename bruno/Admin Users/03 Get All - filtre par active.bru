@@ -1,0 +1,15 @@
+meta {
+  name: Get All - filtre par active
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/admin/users?active=true
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}

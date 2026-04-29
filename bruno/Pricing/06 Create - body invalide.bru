@@ -1,0 +1,23 @@
+meta {
+  name: Create - body invalide
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/pricing
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "label": "",
+    "payment_mode": "INVALIDE",
+    "price": -10
+  }
+}

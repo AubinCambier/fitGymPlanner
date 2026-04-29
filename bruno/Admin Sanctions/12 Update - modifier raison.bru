@@ -1,0 +1,21 @@
+meta {
+  name: Update - modifier raison
+  type: http
+  seq: 12
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/sanctions/{{sanctionId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "reason": "Raison mise à jour par l'admin"
+  }
+}

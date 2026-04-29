@@ -1,0 +1,23 @@
+meta {
+  name: Create - body invalide
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/sanctions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "user_id": {{targetUserId}},
+    "sanction_type": "INVALID_TYPE",
+    "reason": ""
+  }
+}

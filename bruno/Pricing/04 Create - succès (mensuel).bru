@@ -1,0 +1,30 @@
+meta {
+  name: Create - succès (mensuel)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/pricing
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "label": "Abonnement mensuel",
+    "payment_mode": "MONTHLY",
+    "price": 49.90,
+    "currency": "EUR"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("pricingId", res.body.data.id);
+  }
+}

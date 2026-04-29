@@ -1,0 +1,21 @@
+meta {
+  name: Set Status - réactiver
+  type: http
+  seq: 17
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/users/{{targetUserId}}/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "is_active": true
+  }
+}

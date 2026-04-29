@@ -1,0 +1,15 @@
+meta {
+  name: Get My Sessions - accès refusé (membre)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/coach/sessions
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

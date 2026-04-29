@@ -1,0 +1,23 @@
+meta {
+  name: Create - accès refusé (membre)
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/sanctions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "user_id": {{targetUserId}},
+    "sanction_type": "WARNING",
+    "reason": "Tentative non autorisée"
+  }
+}

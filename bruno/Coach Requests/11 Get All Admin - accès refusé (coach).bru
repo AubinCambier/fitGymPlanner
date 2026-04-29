@@ -1,0 +1,15 @@
+meta {
+  name: Get All Admin - accès refusé (coach)
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/api/v1/admin/requests
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}

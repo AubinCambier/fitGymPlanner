@@ -1,0 +1,15 @@
+meta {
+  name: Get All - filtre par role
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/admin/users?role=COACH
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}

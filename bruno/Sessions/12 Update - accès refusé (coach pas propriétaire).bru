@@ -1,0 +1,21 @@
+meta {
+  name: Update - accès refusé (coach pas propriétaire)
+  type: http
+  seq: 12
+}
+
+put {
+  url: {{baseUrl}}/api/v1/sessions/{{sessionId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}
+
+body:json {
+  {
+    "title": "Tentative de modification"
+  }
+}

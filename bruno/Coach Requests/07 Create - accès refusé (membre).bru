@@ -1,0 +1,22 @@
+meta {
+  name: Create - accès refusé (membre)
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/v1/coach/requests
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "session_id": {{sessionId}},
+    "reason": "Tentative non autorisée"
+  }
+}

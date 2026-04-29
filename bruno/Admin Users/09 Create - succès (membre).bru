@@ -1,0 +1,25 @@
+meta {
+  name: Create - succès (membre)
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "email": "membre2@fitgym.com",
+    "password": "password123",
+    "first_name": "Sophie",
+    "last_name": "Martin",
+    "role": "MEMBER"
+  }
+}

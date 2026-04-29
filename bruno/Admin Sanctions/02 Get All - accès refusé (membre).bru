@@ -1,0 +1,15 @@
+meta {
+  name: Get All - accès refusé (membre)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/admin/sanctions
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

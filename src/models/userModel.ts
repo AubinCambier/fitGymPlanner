@@ -12,6 +12,8 @@ export interface User {
   updated_at: Date;
 }
 
+export type SafeUser = Omit<User, 'password_hash'>;
+
 export const userModel = {
   async findByEmail(email: string): Promise<User | null> {
     const result = await pool.query<User>(
@@ -50,6 +52,7 @@ export const userModel = {
     password_hash?: string;
     first_name?: string;
     last_name?: string;
+    role?: string;
   }): Promise<User | null> {
     const fields: string[] = [];
     const values: unknown[] = [];
@@ -59,6 +62,7 @@ export const userModel = {
     if (data.password_hash !== undefined) { fields.push(`password_hash = $${idx++}`); values.push(data.password_hash); }
     if (data.first_name !== undefined) { fields.push(`first_name = $${idx++}`); values.push(data.first_name); }
     if (data.last_name !== undefined) { fields.push(`last_name = $${idx++}`); values.push(data.last_name); }
+    if (data.role !== undefined) { fields.push(`role = $${idx++}`); values.push(data.role); }
 
     if (fields.length === 0) return userModel.findById(id);
 
@@ -66,6 +70,39 @@ export const userModel = {
     const result = await pool.query<User>(
       `UPDATE users SET ${fields.join(', ')} WHERE id = $${idx} RETURNING *`,
       values
+    );
+    return result.rows[0] ?? null;
+  },
+
+  async findAll(filters: { role?: string; active?: boolean }): Promise<SafeUser[]> {
+    const conditions: string[] = [];
+    const values: unknown[] = [];
+    let idx = 1;
+
+    if (filters.role !== undefined) {
+      conditions.push(`role = $${idx++}`);
+      values.push(filters.role);
+    }
+    if (filters.active !== undefined) {
+      conditions.push(`is_active = $${idx++}`);
+      values.push(filters.active);
+    }
+
+    const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+    const result = await pool.query<SafeUser>(
+      `SELECT id, email, first_name, last_name, role, is_active, created_at, updated_at
+       FROM users ${where} ORDER BY created_at DESC`,
+      values
+    );
+    return result.rows;
+  },
+
+  async setStatus(id: number, isActive: boolean): Promise<SafeUser | null> {
+    const result = await pool.query<SafeUser>(
+      `UPDATE users SET is_active = $1
+       WHERE id = $2
+       RETURNING id, email, first_name, last_name, role, is_active, created_at, updated_at`,
+      [isActive, id]
     );
     return result.rows[0] ?? null;
   },

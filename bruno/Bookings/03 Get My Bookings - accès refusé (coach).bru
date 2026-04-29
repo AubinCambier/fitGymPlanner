@@ -1,0 +1,15 @@
+meta {
+  name: Get My Bookings - accès refusé (coach)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/bookings
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}

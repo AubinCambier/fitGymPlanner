@@ -1,0 +1,21 @@
+meta {
+  name: Create - session introuvable
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/v1/bookings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "session_id": 99999
+  }
+}

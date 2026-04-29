@@ -1,0 +1,22 @@
+meta {
+  name: Update - succès (admin)
+  type: http
+  seq: 11
+}
+
+put {
+  url: {{baseUrl}}/api/v1/sessions/{{sessionId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "title": "Yoga du matin (modifié)",
+    "capacity": 20
+  }
+}

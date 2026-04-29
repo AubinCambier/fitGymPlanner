@@ -1,0 +1,15 @@
+meta {
+  name: Get My Requests - accès refusé (membre)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/coach/requests
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}

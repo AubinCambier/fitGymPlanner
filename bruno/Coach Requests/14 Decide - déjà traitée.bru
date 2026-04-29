@@ -1,0 +1,21 @@
+meta {
+  name: Decide - déjà traitée
+  type: http
+  seq: 14
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/requests/{{requestId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "status": "APPROVED"
+  }
+}

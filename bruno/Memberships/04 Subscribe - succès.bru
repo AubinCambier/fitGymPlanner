@@ -1,0 +1,22 @@
+meta {
+  name: Subscribe - succès
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/memberships
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "pricing_id": {{pricingId}},
+    "payment_mode": "MONTHLY"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Update - lever sanction (réactivation auto)
+  type: http
+  seq: 13
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/sanctions/{{sanctionId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "is_active": false
+  }
+}

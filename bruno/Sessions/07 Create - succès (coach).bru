@@ -1,0 +1,27 @@
+meta {
+  name: Create - succès (coach)
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/v1/sessions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}
+
+body:json {
+  {
+    "title": "CrossFit intensif",
+    "description": "Séance cardio haute intensité",
+    "session_type_id": 1,
+    "start_time": "2026-06-02T18:00:00+00:00",
+    "end_time": "2026-06-02T19:00:00+00:00",
+    "capacity": 10,
+    "intensity": "HIGH"
+  }
+}

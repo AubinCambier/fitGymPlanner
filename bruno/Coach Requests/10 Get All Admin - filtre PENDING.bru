@@ -1,0 +1,15 @@
+meta {
+  name: Get All Admin - filtre PENDING
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/api/v1/admin/requests?status=PENDING
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}

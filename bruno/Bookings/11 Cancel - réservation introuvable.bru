@@ -1,0 +1,15 @@
+meta {
+  name: Cancel - réservation introuvable
+  type: http
+  seq: 11
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/bookings/99999/cancel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
