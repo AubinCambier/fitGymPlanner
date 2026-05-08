@@ -50,7 +50,9 @@ export const coachRequestController = {
   async getAllAdmin(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const status = req.query['status'] as string | undefined;
-      const requests = await coachRequestModel.findAll({ status });
+      const filters: { status?: string } = {};
+      if (status !== undefined) filters.status = status;
+      const requests = await coachRequestModel.findAll(filters);
       res.json({ status: 'success', data: requests });
     } catch (err) {
       next(err);
@@ -66,11 +68,12 @@ export const coachRequestController = {
       if (!existing) throw new AppError('Demande introuvable', 404);
       if (existing.status !== 'PENDING') throw new AppError('Demande déjà traitée', 409);
 
-      const updated = await coachRequestModel.decide(id, {
+      const decideData: { status: 'APPROVED' | 'REJECTED'; admin_id: number; admin_comment?: string } = {
         status,
         admin_id: req.user!.id,
-        admin_comment,
-      });
+      };
+      if (admin_comment !== undefined) decideData.admin_comment = admin_comment;
+      const updated = await coachRequestModel.decide(id, decideData);
 
       const coach = await userModel.findById(existing.coach_id);
 
@@ -78,24 +81,24 @@ export const coachRequestController = {
         await sessionModel.update(existing.session_id, { status: 'CANCELLED' });
 
         if (coach) {
-          await sendMail(
+          sendMail(
             coach.email,
             'Votre demande de suppression a été approuvée',
             `<p>Bonjour ${coach.first_name},</p>
              <p>Votre demande de suppression pour la session #${existing.session_id} a été <strong>approuvée</strong>.</p>
              ${admin_comment ? `<p>Commentaire de l'admin : ${admin_comment}</p>` : ''}
              <p>La session a été annulée.</p>`
-          );
+          ).catch((err: unknown) => console.error('Mail error:', err));
         }
       } else {
         if (coach) {
-          await sendMail(
+          sendMail(
             coach.email,
             'Votre demande de suppression a été refusée',
             `<p>Bonjour ${coach.first_name},</p>
              <p>Votre demande de suppression pour la session #${existing.session_id} a été <strong>refusée</strong>.</p>
              ${admin_comment ? `<p>Commentaire de l'admin : ${admin_comment}</p>` : ''}`
-          );
+          ).catch((err: unknown) => console.error('Mail error:', err));
         }
       }
 

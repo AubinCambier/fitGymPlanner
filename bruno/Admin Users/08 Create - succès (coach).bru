@@ -14,9 +14,13 @@ auth:bearer {
   token: {{adminToken}}
 }
 
+script:pre-request {
+  bru.setEnvVar("newCoachEmail", "coach_" + Date.now() + "@fitgym.com");
+}
+
 body:json {
   {
-    "email": "coach2@fitgym.com",
+    "email": "{{newCoachEmail}}",
     "password": "password123",
     "first_name": "Marc",
     "last_name": "Dupont",
@@ -28,4 +32,16 @@ script:post-response {
   if (res.status === 201) {
     bru.setEnvVar("targetUserId", res.body.data.id);
   }
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
 }

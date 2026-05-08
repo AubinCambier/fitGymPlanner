@@ -19,3 +19,12 @@ body:json {
     "session_id": 99999
   }
 }
+
+tests {
+  test("status is 404", function() {
+    expect(res.status).to.equal(404);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
+}

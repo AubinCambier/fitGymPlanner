@@ -12,10 +12,26 @@ post {
 
 body:json {
   {
-    "email": "membre@fitgym.com",
+    "email": "{{memberEmail}}",
     "password": "password123",
     "first_name": "Alice",
     "last_name": "Dupont"
   }
+}
+
+script:pre-request {
+  bru.setEnvVar("memberEmail", "membre_" + Date.now() + "@fitgym.com");
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
 }
 

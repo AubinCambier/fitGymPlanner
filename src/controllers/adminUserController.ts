@@ -17,7 +17,10 @@ export const adminUserController = {
       const activeParam = req.query['active'] as string | undefined;
       const active = activeParam === undefined ? undefined : activeParam === 'true';
 
-      const users = await userModel.findAll({ role, active });
+      const filters: { role?: string; active?: boolean } = {};
+      if (role !== undefined) filters.role = role;
+      if (active !== undefined) filters.active = active;
+      const users = await userModel.findAll(filters);
       res.json({ status: 'success', data: users });
     } catch (err) {
       next(err);

@@ -20,3 +20,15 @@ body:json {
     "payment_mode": "MONTHLY"
   }
 }
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
+}

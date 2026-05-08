@@ -1,0 +1,33 @@
+meta {
+  name: Setup - login coach
+  type: http
+  seq: 0
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "coach@fitgym.com",
+    "password": "password123"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("coachToken", res.body.data.token);
+  }
+}
+
+tests {
+  test("coach login status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("coachToken saved", function() {
+    expect(res.body.data).to.have.property("token");
+  });
+}

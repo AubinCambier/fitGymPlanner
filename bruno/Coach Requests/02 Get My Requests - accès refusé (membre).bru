@@ -11,5 +11,14 @@ get {
 }
 
 auth:bearer {
-  token: {{authToken}}
+  token: {{adminToken}}
+}
+
+tests {
+  test("status is 403", function() {
+    expect(res.status).to.equal(403);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
 }

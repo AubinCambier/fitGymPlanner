@@ -1,0 +1,40 @@
+meta {
+  name: Create session 2
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/v1/sessions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "title": "CrossFit du soir",
+    "description": "Séance haute intensité",
+    "session_type_id": 2,
+    "coach_id": 2,
+    "start_time": "2026-06-02T18:00:00+00:00",
+    "end_time": "2026-06-02T19:00:00+00:00",
+    "capacity": 10,
+    "intensity": "HIGH"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("sessionId2", res.body.data.id);
+  }
+}
+
+tests {
+  test("session 2 créée", function() {
+    expect(res.status).to.equal(201);
+  });
+}

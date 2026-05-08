@@ -1,0 +1,34 @@
+meta {
+  name: Create request for APPROVED
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/api/v1/coach/requests
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}
+
+body:json {
+  {
+    "session_id": {{sessionId2}},
+    "reason": "Indisponibilité du coach pour cette session"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("requestIdApproved", res.body.data.id);
+  }
+}
+
+tests {
+  test("request for approved créée", function() {
+    expect(res.status).to.equal(201);
+  });
+}

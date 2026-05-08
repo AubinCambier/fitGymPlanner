@@ -1,0 +1,30 @@
+meta {
+  name: Login membre
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{memberEmail}}",
+    "password": "password123"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("authToken", res.body.data.token);
+  }
+}
+
+tests {
+  test("membre login réussi", function() {
+    expect(res.status).to.equal(200);
+  });
+}

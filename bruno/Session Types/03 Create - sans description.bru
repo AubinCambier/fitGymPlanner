@@ -14,8 +14,24 @@ auth:bearer {
   token: {{adminToken}}
 }
 
+script:pre-request {
+  bru.setEnvVar("newSessionTypeName2", "Aquabike_" + Date.now());
+}
+
 body:json {
   {
-    "name": "CrossFit"
+    "name": "{{newSessionTypeName2}}"
   }
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
 }

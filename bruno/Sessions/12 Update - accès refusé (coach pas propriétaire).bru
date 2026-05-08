@@ -5,7 +5,7 @@ meta {
 }
 
 put {
-  url: {{baseUrl}}/api/v1/sessions/{{sessionId}}
+  url: {{baseUrl}}/api/v1/sessions/{{notMySessionId}}
   body: json
   auth: bearer
 }
@@ -18,4 +18,13 @@ body:json {
   {
     "title": "Tentative de modification"
   }
+}
+
+tests {
+  test("status is 403", function() {
+    expect(res.status).to.equal(403);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
 }

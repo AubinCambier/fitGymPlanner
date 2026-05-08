@@ -12,7 +12,7 @@ post {
 
 body:json {
   {
-    "email": "membre@fitgym.com",
+    "email": "{{memberEmail}}",
     "password": "password123"
   }
 }
@@ -21,4 +21,16 @@ script:post-response {
   if (res.status === 200) {
     bru.setEnvVar("authToken", res.body.data.token);
   }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has token", function() {
+    expect(res.body.data).to.have.property("token");
+  });
 }

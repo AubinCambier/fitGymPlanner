@@ -5,7 +5,7 @@ meta {
 }
 
 patch {
-  url: {{baseUrl}}/api/v1/admin/requests/{{requestId}}
+  url: {{baseUrl}}/api/v1/admin/requests/{{requestIdApproved}}
   body: json
   auth: bearer
 }
@@ -19,4 +19,16 @@ body:json {
     "status": "APPROVED",
     "admin_comment": "Demande validée, session annulée"
   }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
 }

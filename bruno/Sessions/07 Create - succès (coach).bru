@@ -18,10 +18,22 @@ body:json {
   {
     "title": "CrossFit intensif",
     "description": "Séance cardio haute intensité",
-    "session_type_id": 1,
+    "session_type_id": 2,
     "start_time": "2026-06-02T18:00:00+00:00",
     "end_time": "2026-06-02T19:00:00+00:00",
     "capacity": 10,
     "intensity": "HIGH"
   }
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
 }

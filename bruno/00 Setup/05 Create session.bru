@@ -1,0 +1,40 @@
+meta {
+  name: Create session
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/v1/sessions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "title": "Yoga du matin",
+    "description": "Séance de yoga douce pour bien démarrer la journée",
+    "session_type_id": 2,
+    "coach_id": 2,
+    "start_time": "2026-06-01T09:00:00+00:00",
+    "end_time": "2026-06-01T10:00:00+00:00",
+    "capacity": 15,
+    "intensity": "LOW"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("sessionId", res.body.data.id);
+  }
+}
+
+tests {
+  test("session créée", function() {
+    expect(res.status).to.equal(201);
+  });
+}

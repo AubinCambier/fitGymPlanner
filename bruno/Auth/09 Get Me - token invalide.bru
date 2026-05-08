@@ -13,3 +13,12 @@ get {
 auth:bearer {
   token: token.faux.invalide
 }
+
+tests {
+  test("status is 401", function() {
+    expect(res.status).to.equal(401);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
+}

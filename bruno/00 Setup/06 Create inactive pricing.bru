@@ -1,0 +1,35 @@
+meta {
+  name: Create inactive pricing
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/pricing
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "label": "Tarif test inactif",
+    "payment_mode": "MONTHLY",
+    "price": 99.99
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("inactivePricingId", res.body.data.id);
+  }
+}
+
+tests {
+  test("tarif créé", function() {
+    expect(res.status).to.equal(201);
+  });
+}

@@ -258,9 +258,10 @@ INSERT INTO pricing (label, payment_mode, price) VALUES
     ('Séance à l''unité',       'PAY_PER_SESSION',   8.00),
     ('Abonnement mensuel premium', 'MONTHLY',       49.99);
 
--- Compte admin par défaut (mot de passe à changer en prod !)
--- hash = bcrypt('admin123')
+-- Comptes par défaut (mots de passe à changer en prod !)
+-- admin123 → adminToken, password123 → coachToken
 INSERT INTO users (email, password_hash, first_name, last_name, role) VALUES
-    ('admin@fitgym.com', '$2b$10$placeholder_hash_change_me', 'Admin', 'FitGym', 'ADMIN');
+    ('admin@fitgym.com', '$2b$12$txhIwfCXVlVUtCk.xrNexeu.UcU/w0vWBReRhu8wSQYX7ADG1ekKO', 'Admin', 'FitGym', 'ADMIN'),
+    ('coach@fitgym.com', '$2b$12$ardfn3KoVHwWEUaNk5MKwewLsgf4enveTCw8DuN8YCyldtmJCoKrW', 'Coach', 'FitGym', 'COACH');
 
 COMMIT;

@@ -1,0 +1,33 @@
+meta {
+  name: Re-login après changement mot de passe
+  type: http
+  seq: 99
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{memberEmail}}",
+    "password": "nouveaumdp123"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("authToken", res.body.data.token);
+  }
+}
+
+tests {
+  test("re-login après changement réussi", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("authToken rafraîchi", function() {
+    expect(res.body.data).to.have.property("token");
+  });
+}

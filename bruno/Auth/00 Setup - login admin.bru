@@ -1,0 +1,33 @@
+meta {
+  name: Setup - login admin
+  type: http
+  seq: 0
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "admin@fitgym.com",
+    "password": "admin123"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("adminToken", res.body.data.token);
+  }
+}
+
+tests {
+  test("admin login status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("adminToken saved", function() {
+    expect(res.body.data).to.have.property("token");
+  });
+}

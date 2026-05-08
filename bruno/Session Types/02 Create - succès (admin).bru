@@ -14,9 +14,31 @@ auth:bearer {
   token: {{adminToken}}
 }
 
+script:pre-request {
+  bru.setEnvVar("newSessionTypeName", "Zumba_" + Date.now());
+}
+
 body:json {
   {
-    "name": "Yoga",
-    "description": "Séance de yoga douce"
+    "name": "{{newSessionTypeName}}",
+    "description": "Cours de danse cardio"
   }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("newSessionTypeId", res.body.data.id);
+  }
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
 }

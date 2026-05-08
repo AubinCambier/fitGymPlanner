@@ -20,3 +20,12 @@ body:json {
     "payment_mode": "MONTHLY"
   }
 }
+
+tests {
+  test("status is 409", function() {
+    expect(res.status).to.equal(409);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Deactivate pricing
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/pricing/{{inactivePricingId}}/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "is_active": false
+  }
+}
+
+tests {
+  test("tarif désactivé", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -18,7 +18,7 @@ body:json {
   {
     "title": "Yoga du matin",
     "description": "Séance de yoga douce pour bien démarrer la journée",
-    "session_type_id": 1,
+    "session_type_id": 2,
     "coach_id": 2,
     "start_time": "2026-06-01T09:00:00+00:00",
     "end_time": "2026-06-01T10:00:00+00:00",
@@ -31,4 +31,16 @@ script:post-response {
   if (res.status === 201) {
     bru.setEnvVar("sessionId", res.body.data.id);
   }
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
 }

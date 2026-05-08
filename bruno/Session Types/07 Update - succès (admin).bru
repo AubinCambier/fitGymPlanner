@@ -5,7 +5,7 @@ meta {
 }
 
 put {
-  url: {{baseUrl}}/api/v1/session-types/1
+  url: {{baseUrl}}/api/v1/session-types/{{newSessionTypeId}}
   body: json
   auth: bearer
 }
@@ -19,4 +19,16 @@ body:json {
     "name": "Yoga Flow",
     "description": "Yoga dynamique"
   }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
 }

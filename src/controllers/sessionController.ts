@@ -10,7 +10,11 @@ export const sessionController = {
       const date = req.query['date'] as string | undefined;
       const coach_id = req.query['coach_id'] ? Number(req.query['coach_id']) : undefined;
 
-      const sessions = await sessionModel.findAll({ type, date, coach_id });
+      const filters: { type?: number; date?: string; coach_id?: number } = {};
+      if (type !== undefined) filters.type = type;
+      if (date !== undefined) filters.date = date;
+      if (coach_id !== undefined) filters.coach_id = coach_id;
+      const sessions = await sessionModel.findAll(filters);
       res.json({ status: 'success', data: sessions });
     } catch (err) {
       next(err);
