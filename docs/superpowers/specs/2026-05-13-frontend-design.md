@@ -1,60 +1,60 @@
 # FitGym Planner — Frontend Design
 
-## Contexte
+## Context
 
-Frontend web pour l'API REST FitGym Planner (Express + PostgreSQL).
-3 rôles côté backend : ADMIN, COACH, MEMBER.
-Scope initial : rôle MEMBER uniquement. COACH et ADMIN ajoutés ensuite.
+Web frontend for the FitGym Planner REST API (Express + PostgreSQL).
+3 roles on the backend: ADMIN, COACH, MEMBER.
+Initial scope: MEMBER role only. COACH and ADMIN added afterwards.
 
 ---
 
-## Stack technique
+## Tech Stack
 
-| Outil | Rôle |
+| Tool | Role |
 |---|---|
-| Vue 3 + Vite + TypeScript | Framework + bundler + typage |
-| Vue Router | Navigation entre pages |
-| Pinia | État global (token JWT, utilisateur connecté) |
-| CSS scoped (`<style scoped>`) | Styles par composant, pas de framework CSS |
-| Fetch natif | Appels HTTP vers l'API |
+| Vue 3 + Vite + TypeScript | Framework + bundler + typing |
+| Vue Router | Navigation between pages |
+| Pinia | Global state (JWT token, logged-in user) |
+| CSS scoped (`<style scoped>`) | Per-component styles, no CSS framework |
+| Native Fetch | HTTP calls to the API |
 
-Choix Vue 3 plutôt que React : courbe d'apprentissage plus douce, syntaxe plus lisible, plus facile à expliquer.
-Choix CSS pur : pas de dépendance supplémentaire, contrôle total, cohérent avec la maquette login fournie.
+Vue 3 chosen over React: gentler learning curve, more readable syntax, easier to explain.
+Plain CSS chosen: no extra dependency, full control, consistent with the provided login mockup.
 
 ---
 
-## Organisation dans le repo
+## Repo Organisation
 
-Monorepo : backend et frontend dans le même dépôt Git.
+Monorepo: backend and frontend in the same Git repository.
 
 ```
 fitGymPlanner/
-├── backend/        ← API Express (existant)
-├── frontend/       ← Vue 3 (à créer)
+├── backend/        ← Express API (existing)
+├── frontend/       ← Vue 3 (to be created)
 ├── docker-compose.yml
 ├── CLAUDE.md
 └── README.md
 ```
 
-Le frontend a son propre `package.json` et `node_modules`.
-L'API tourne sur `http://localhost:3000`, le frontend sur `http://localhost:5173` (Vite default).
+The frontend has its own `package.json` and `node_modules`.
+API runs on `http://localhost:3000`, frontend on `http://localhost:5173` (Vite default).
 
 ---
 
-## Architecture frontend
+## Frontend Architecture
 
-Architecture en 4 couches, inspirée du MVC backend :
+4-layer architecture, inspired by the backend MVC:
 
-| Couche | Dossier | Responsabilité |
+| Layer | Folder | Responsibility |
 |---|---|---|
-| API | `src/api/` | Fonctions fetch vers le backend |
-| État global | `src/stores/` | Token JWT + utilisateur (Pinia) |
+| API | `src/api/` | Fetch functions to the backend |
+| Global state | `src/stores/` | JWT token + user (Pinia) |
 | Routing | `src/router/` | Routes + navigation guard |
-| UI | `src/views/` + `src/components/` | Pages et composants réutilisables |
+| UI | `src/views/` + `src/components/` | Pages and reusable components |
 
 ---
 
-## Structure des fichiers
+## File Structure
 
 ```
 frontend/src/
@@ -91,40 +91,40 @@ frontend/src/
 
 ---
 
-## Pages — Scope MEMBER
+## Pages — MEMBER Scope
 
-| Route | Vue | Accès | Description |
+| Route | View | Access | Description |
 |---|---|---|---|
-| `/login` | `LoginView.vue` | Public | Formulaire connexion |
-| `/register` | `RegisterView.vue` | Public | Formulaire inscription |
-| `/member/dashboard` | `DashboardView.vue` | MEMBER | Résumé : prochaines sessions réservées, statut abonnement |
-| `/member/sessions` | `SessionsView.vue` | MEMBER | Liste des sessions disponibles + bouton réserver |
-| `/member/bookings` | `BookingsView.vue` | MEMBER | Mes réservations + bouton annuler |
-| `/member/membership` | `MembershipView.vue` | MEMBER | Mon abonnement + souscrire / annuler |
-| `/member/profile` | `ProfileView.vue` | MEMBER | Modifier nom, email, mot de passe |
+| `/login` | `LoginView.vue` | Public | Login form |
+| `/register` | `RegisterView.vue` | Public | Registration form |
+| `/member/dashboard` | `DashboardView.vue` | MEMBER | Summary: upcoming bookings, membership status |
+| `/member/sessions` | `SessionsView.vue` | MEMBER | Available sessions list + book button |
+| `/member/bookings` | `BookingsView.vue` | MEMBER | My bookings + cancel button |
+| `/member/membership` | `MembershipView.vue` | MEMBER | My membership + subscribe / cancel |
+| `/member/profile` | `ProfileView.vue` | MEMBER | Edit name, email, password |
 
 ---
 
-## Gestion du token JWT
+## JWT Token Management
 
-**Stockage :** `localStorage` (persiste après fermeture du navigateur).
+**Storage:** `localStorage` (persists after browser close).
 
-**Flux connexion :**
-1. Login → API retourne `{ token, user }`
-2. Pinia store sauvegarde `token` et `user`
+**Login flow:**
+1. Login → API returns `{ token, user }`
+2. Pinia store saves `token` and `user`
 3. `localStorage.setItem('token', ...)` + `localStorage.setItem('user', ...)`
-4. Redirect vers `/member/dashboard` selon le rôle
+4. Redirect to `/member/dashboard` based on role
 
-**Flux déconnexion :**
-1. `logout()` dans le store Pinia
-2. Vide `token` et `user` dans le store
+**Logout flow:**
+1. `logout()` called on Pinia store
+2. Clears `token` and `user` from the store
 3. `localStorage.removeItem('token')` + `localStorage.removeItem('user')`
-4. Redirect vers `/login`
+4. Redirect to `/login`
 
-**Initialisation au démarrage :**
-Dans `main.ts` ou `App.vue` : lire `localStorage` et réhydrater le store Pinia si un token existe.
+**Startup hydration:**
+In `main.ts` or `App.vue`: read `localStorage` and rehydrate the Pinia store if a token exists.
 
-**Navigation guard (router) :**
+**Navigation guard (router):**
 ```ts
 router.beforeEach((to) => {
   const auth = useAuthStore()
@@ -134,9 +134,9 @@ router.beforeEach((to) => {
 })
 ```
 
-**Envoi du token dans chaque requête :**
+**Sending the token in every request:**
 ```ts
-// api/auth.ts — pattern répété dans chaque fichier api/
+// api/auth.ts — pattern repeated in every api/ file
 const token = useAuthStore().token
 fetch(url, {
   headers: { Authorization: `Bearer ${token}` }
@@ -145,14 +145,14 @@ fetch(url, {
 
 ---
 
-## Design visuel
+## Visual Design
 
-Référence : maquette login fournie (HTML/CSS pur).
-- Palette : fond blanc / dark navy (`#0F172A`) + vert émeraude (`#10B981`)
-- Fonts : Outfit (titres) + DM Sans (corps)
-- Style : cards épurées, inputs avec icônes, boutons avec état loading
+Reference: provided login mockup (plain HTML/CSS).
+- Palette: white background / dark navy (`#0F172A`) + emerald green (`#10B981`)
+- Fonts: Outfit (headings) + DM Sans (body)
+- Style: clean cards, inputs with icons, buttons with loading state
 
-Chaque composant Vue utilise `<style scoped>` avec les mêmes variables CSS :
+Each Vue component uses `<style scoped>` with the same CSS variables:
 ```css
 :root {
   --primary: #0F172A;
@@ -163,27 +163,27 @@ Chaque composant Vue utilise `<style scoped>` avec les mêmes variables CSS :
 }
 ```
 
-Ces variables sont définies dans un fichier global `src/assets/main.css` importé dans `main.ts`.
+These variables are defined in a global `src/assets/main.css` file imported in `main.ts`.
 
 ---
 
-## Ordre d'implémentation
+## Implementation Order
 
-1. Initialisation Vite + Vue Router + Pinia
+1. Vite + Vue Router + Pinia setup
 2. `stores/auth.ts` + `api/auth.ts`
-3. `LoginView.vue` (basé sur la maquette)
+3. `LoginView.vue` (based on the mockup)
 4. `RegisterView.vue`
 5. Navigation guard + `AppHeader.vue`
 6. `api/sessions.ts` + `SessionsView.vue`
 7. `api/bookings.ts` + `BookingsView.vue`
-8. `DashboardView.vue` (agrège sessions + bookings)
+8. `DashboardView.vue` (aggregates sessions + bookings)
 9. `api/membership.ts` + `MembershipView.vue`
 10. `ProfileView.vue`
 
 ---
 
-## Extensions futures (hors scope initial)
+## Future Extensions (out of initial scope)
 
-- Dashboard COACH : ses sessions, participants, demandes de suppression
-- Dashboard ADMIN : users, sanctions, tarifs, types de session
-- Application mobile (React Native ou Flutter) consommant le même backend REST
+- COACH dashboard: own sessions, participants, cancellation requests
+- ADMIN dashboard: users, sanctions, pricing, session types
+- Mobile app (React Native or Flutter) consuming the same REST backend
