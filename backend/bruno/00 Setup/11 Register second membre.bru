@@ -1,0 +1,36 @@
+meta {
+  name: Register second membre
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{memberEmail2}}",
+    "password": "password123",
+    "first_name": "Second",
+    "last_name": "Member"
+  }
+}
+
+script:pre-request {
+  bru.setEnvVar("memberEmail2", "setup_membre2_" + Date.now() + "@fitgym.com");
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("authToken2", res.body.data.token);
+  }
+}
+
+tests {
+  test("second member registered", function() {
+    expect(res.status).to.equal(201);
+  });
+}

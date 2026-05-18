@@ -1,0 +1,33 @@
+meta {
+  name: Book past session
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/api/v1/bookings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "session_id": {{pastSessionId}}
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("pastBookingId", res.body.data.id);
+  }
+}
+
+tests {
+  test("past booking created", function() {
+    expect(res.status).to.equal(201);
+  });
+}

@@ -16,10 +16,16 @@ auth:bearer {
 
 body:json {
   {
-    "booking_id": {{bookingId}},
+    "booking_id": {{pastBookingId}},
     "rating": 4,
     "comment": "Great session!",
     "is_anonymous": false
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("reviewId", res.body.data.id);
   }
 }
 
