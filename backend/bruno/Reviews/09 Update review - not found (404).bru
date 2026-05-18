@@ -1,0 +1,30 @@
+meta {
+  name: Update review - not found (404)
+  type: http
+  seq: 9
+}
+
+put {
+  url: {{baseUrl}}/api/v1/reviews/99999
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "rating": 3
+  }
+}
+
+tests {
+  test("status is 404", function() {
+    expect(res.status).to.equal(404);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
+}

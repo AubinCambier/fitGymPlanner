@@ -1,0 +1,32 @@
+meta {
+  name: Create review - duplicate booking (409)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/reviews
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "booking_id": {{bookingId}},
+    "rating": 5,
+    "comment": "Trying to review again"
+  }
+}
+
+tests {
+  test("status is 409", function() {
+    expect(res.status).to.equal(409);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
+}

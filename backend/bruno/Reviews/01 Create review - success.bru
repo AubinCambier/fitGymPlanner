@@ -1,0 +1,42 @@
+meta {
+  name: Create review - success
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/reviews
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "booking_id": {{bookingId}},
+    "rating": 4,
+    "comment": "Great session!",
+    "is_anonymous": false
+  }
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
+  test("rating matches", function() {
+    expect(res.body.data.rating).to.equal(4);
+  });
+  test("is_anonymous is false", function() {
+    expect(res.body.data.is_anonymous).to.equal(false);
+  });
+}

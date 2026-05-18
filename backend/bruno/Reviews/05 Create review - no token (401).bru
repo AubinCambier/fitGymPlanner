@@ -1,0 +1,27 @@
+meta {
+  name: Create review - no token (401)
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/v1/reviews
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "booking_id": 1,
+    "rating": 3
+  }
+}
+
+tests {
+  test("status is 401", function() {
+    expect(res.status).to.equal(401);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
+}

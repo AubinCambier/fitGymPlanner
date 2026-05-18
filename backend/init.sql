@@ -152,6 +152,18 @@ CREATE TABLE payments (
     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE reviews (
+    id           SERIAL PRIMARY KEY,
+    booking_id   INTEGER NOT NULL UNIQUE REFERENCES bookings(id) ON DELETE CASCADE,
+    member_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    coach_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    rating       SMALLINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    comment      TEXT,
+    is_anonymous BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 -- ========================
 -- INDEX
 -- ========================
@@ -168,6 +180,8 @@ CREATE INDEX idx_bookings_status ON bookings(status);
 CREATE INDEX idx_memberships_member ON memberships(member_id);
 CREATE INDEX idx_coach_requests_status ON coach_requests(status);
 CREATE INDEX idx_payments_user ON payments(user_id);
+CREATE INDEX idx_reviews_coach ON reviews(coach_id);
+CREATE INDEX idx_reviews_member ON reviews(member_id);
 CREATE INDEX idx_sanctions_user ON sanctions(user_id);
 CREATE INDEX idx_sanctions_active ON sanctions(is_active) WHERE is_active = TRUE;
 
@@ -198,6 +212,10 @@ CREATE TRIGGER trg_memberships_updated
 
 CREATE TRIGGER trg_preferences_updated
     BEFORE UPDATE ON preferences
+    FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+
+CREATE TRIGGER trg_reviews_updated
+    BEFORE UPDATE ON reviews
     FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 
 -- Vérifier que la capacité n'est pas dépassée avant un booking

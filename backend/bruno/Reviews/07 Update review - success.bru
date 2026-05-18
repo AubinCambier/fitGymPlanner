@@ -1,0 +1,37 @@
+meta {
+  name: Update review - success
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/api/v1/reviews/{{reviewId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "rating": 5,
+    "comment": "Updated comment - even better!"
+  }
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("rating updated", function() {
+    expect(res.body.data.rating).to.equal(5);
+  });
+  test("comment updated", function() {
+    expect(res.body.data.comment).to.equal("Updated comment - even better!");
+  });
+}

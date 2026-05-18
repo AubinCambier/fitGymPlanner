@@ -1,0 +1,38 @@
+meta {
+  name: Get coach reviews - success (no auth required)
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/api/v1/reviews/coach/{{coachId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has coach", function() {
+    expect(res.body.data).to.have.property("coach");
+  });
+  test("data has stats", function() {
+    expect(res.body.data).to.have.property("stats");
+  });
+  test("stats has average", function() {
+    expect(res.body.data.stats).to.have.property("average");
+  });
+  test("stats has total", function() {
+    expect(res.body.data.stats).to.have.property("total");
+  });
+  test("stats has breakdown", function() {
+    expect(res.body.data.stats).to.have.property("breakdown");
+  });
+  test("data has reviews array", function() {
+    expect(res.body.data.reviews).to.be.an("array");
+  });
+}

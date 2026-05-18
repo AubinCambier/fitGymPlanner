@@ -1,0 +1,30 @@
+meta {
+  name: Update review - not your review (403)
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/api/v1/reviews/{{reviewId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken2}}
+}
+
+body:json {
+  {
+    "rating": 1
+  }
+}
+
+tests {
+  test("status is 403", function() {
+    expect(res.status).to.equal(403);
+  });
+  test("body status is error", function() {
+    expect(res.body.status).to.equal("error");
+  });
+}

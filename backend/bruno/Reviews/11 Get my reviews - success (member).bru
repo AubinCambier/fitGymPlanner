@@ -1,0 +1,32 @@
+meta {
+  name: Get my reviews - success (member)
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/api/v1/reviews/mine
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data is array", function() {
+    expect(res.body.data).to.be.an("array");
+  });
+  test("reviews have booking_id", function() {
+    if (res.body.data.length > 0) {
+      expect(res.body.data[0]).to.have.property("booking_id");
+    }
+  });
+}
