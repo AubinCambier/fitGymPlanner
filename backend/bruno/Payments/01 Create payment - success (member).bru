@@ -1,0 +1,37 @@
+meta {
+  name: Create payment - success (member)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/payments
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "amount": 8.00,
+    "description": "Session booking: Morning Yoga"
+  }
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("body status is success", function() {
+    expect(res.body.status).to.equal("success");
+  });
+  test("data has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
+  test("amount matches", function() {
+    expect(parseFloat(res.body.data.amount)).to.equal(8);
+  });
+}

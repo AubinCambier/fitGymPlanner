@@ -1,0 +1,17 @@
+meta {
+  name: Get my payments - no token
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/api/v1/payments/me
+  body: none
+  auth: none
+}
+
+tests {
+  test("status is 401", function() {
+    expect(res.status).to.equal(401);
+  });
+}

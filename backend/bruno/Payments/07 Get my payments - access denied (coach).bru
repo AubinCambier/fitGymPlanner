@@ -1,0 +1,21 @@
+meta {
+  name: Get my payments - access denied (coach)
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/v1/payments/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{coachToken}}
+}
+
+tests {
+  test("status is 403", function() {
+    expect(res.status).to.equal(403);
+  });
+}
