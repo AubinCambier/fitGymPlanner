@@ -9,7 +9,7 @@
       <div class="filters">
         <select v-model="typeFilter" class="select" @change="applyFilters">
           <option value="">All types</option>
-          <option v-for="t in sessionTypes" :key="t.id" :value="t.name">{{ t.name }}</option>
+          <option v-for="t in sessionTypes" :key="t.id" :value="t.id">{{ t.name }}</option>
         </select>
         <input v-model="dateFilter" type="date" class="input-date" @change="applyFilters" />
         <button v-if="typeFilter || dateFilter" class="btn-reset" @click="resetFilters">Clear</button>
