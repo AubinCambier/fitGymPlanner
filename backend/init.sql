@@ -8,7 +8,7 @@ BEGIN;
 -- RESET (idempotent)
 -- ========================
 
-DROP TABLE IF EXISTS preferences, sanctions, coach_requests, memberships, pricing, bookings, sessions, session_types, users CASCADE;
+DROP TABLE IF EXISTS reviews, payments, preferences, sanctions, coach_requests, memberships, pricing, bookings, sessions, session_types, users CASCADE;
 DROP TYPE IF EXISTS user_role, payment_mode, membership_status, session_status, booking_status, request_status, sanction_type, intensity_level CASCADE;
 
 -- ========================
@@ -28,7 +28,7 @@ CREATE TYPE intensity_level AS ENUM ('LOW', 'MEDIUM', 'HIGH');
 -- TABLES
 -- ========================
 
--- Utilisateurs (admin, coach, membre)
+-- Users (admin, coach, member)
 CREATE TABLE users (
     id              SERIAL PRIMARY KEY,
     email           VARCHAR(255) UNIQUE NOT NULL,
@@ -41,14 +41,14 @@ CREATE TABLE users (
     updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Types de session (Yoga, CrossFit, Pilates, etc.)
+-- Session types (Yoga, CrossFit, Pilates, etc.)
 CREATE TABLE session_types (
     id      SERIAL PRIMARY KEY,
     name    VARCHAR(100) UNIQUE NOT NULL,
     description TEXT
 );
 
--- Sessions de cours
+-- Training sessions
 CREATE TABLE sessions (
     id              SERIAL PRIMARY KEY,
     title           VARCHAR(255) NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE sessions (
     CONSTRAINT chk_session_dates CHECK (end_time > start_time)
 );
 
--- Réservations (membre <-> session)
+-- Bookings (member <-> session)
 CREATE TABLE bookings (
     id          SERIAL PRIMARY KEY,
     member_id   INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -78,7 +78,7 @@ CREATE TABLE bookings (
     CONSTRAINT uq_booking UNIQUE (member_id, session_id)
 );
 
--- Tarifs
+-- Pricing plans
 CREATE TABLE pricing (
     id              SERIAL PRIMARY KEY,
     label           VARCHAR(100) NOT NULL,
@@ -89,7 +89,8 @@ CREATE TABLE pricing (
     created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Abonnements / adhésions des membres
+-- Member memberships / subscriptions
+-- end_date is set automatically: MONTHLY → start_date + 30 days, PAY_PER_SESSION → NULL
 CREATE TABLE memberships (
     id              SERIAL PRIMARY KEY,
     member_id       INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -97,12 +98,17 @@ CREATE TABLE memberships (
     payment_mode    payment_mode NOT NULL,
     status          membership_status NOT NULL DEFAULT 'ACTIVE',
     start_date      DATE NOT NULL DEFAULT CURRENT_DATE,
-    end_date        DATE,
+    end_date        DATE GENERATED ALWAYS AS (
+                        CASE WHEN payment_mode = 'MONTHLY'
+                             THEN (start_date + INTERVAL '30 days')::DATE
+                             ELSE NULL
+                        END
+                    ) STORED,
     created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Demandes de suppression de session (coach -> admin)
+-- Session deletion requests (coach -> admin)
 CREATE TABLE coach_requests (
     id              SERIAL PRIMARY KEY,
     coach_id        INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -117,7 +123,7 @@ CREATE TABLE coach_requests (
     CONSTRAINT uq_coach_request UNIQUE (coach_id, session_id)
 );
 
--- Sanctions (admin -> utilisateur)
+-- Sanctions (admin -> user)
 CREATE TABLE sanctions (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -130,7 +136,7 @@ CREATE TABLE sanctions (
     created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Préférences des membres (pour les recommandations — Phase 6)
+-- Member preferences (for recommendations — Phase 6)
 CREATE TABLE preferences (
     id              SERIAL PRIMARY KEY,
     member_id       INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -178,6 +184,7 @@ CREATE INDEX idx_bookings_member ON bookings(member_id);
 CREATE INDEX idx_bookings_session ON bookings(session_id);
 CREATE INDEX idx_bookings_status ON bookings(status);
 CREATE INDEX idx_memberships_member ON memberships(member_id);
+CREATE UNIQUE INDEX uq_active_membership ON memberships(member_id) WHERE status = 'ACTIVE';
 CREATE INDEX idx_coach_requests_status ON coach_requests(status);
 CREATE INDEX idx_payments_user ON payments(user_id);
 CREATE INDEX idx_reviews_coach ON reviews(coach_id);
@@ -189,7 +196,7 @@ CREATE INDEX idx_sanctions_active ON sanctions(is_active) WHERE is_active = TRUE
 -- TRIGGERS
 -- ========================
 
--- Mise à jour automatique de updated_at
+-- Auto-update updated_at on row change
 CREATE OR REPLACE FUNCTION update_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -218,7 +225,7 @@ CREATE TRIGGER trg_reviews_updated
     BEFORE UPDATE ON reviews
     FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 
--- Vérifier que la capacité n'est pas dépassée avant un booking
+-- Prevent booking when session is full
 CREATE OR REPLACE FUNCTION check_session_capacity()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -234,7 +241,7 @@ BEGIN
     WHERE id = NEW.session_id;
 
     IF current_count >= max_capacity THEN
-        RAISE EXCEPTION 'Session complète : % / % places', current_count, max_capacity;
+        RAISE EXCEPTION 'Session full: % / % spots', current_count, max_capacity;
     END IF;
 
     RETURN NEW;
@@ -245,7 +252,7 @@ CREATE TRIGGER trg_check_capacity
     BEFORE INSERT ON bookings
     FOR EACH ROW EXECUTE FUNCTION check_session_capacity();
 
--- Vérifier qu'un coach ne crée des sessions que pour lui-même
+-- Prevent coach from requesting deletion of another coach's session
 CREATE OR REPLACE FUNCTION check_coach_owns_session()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -256,7 +263,7 @@ BEGIN
     WHERE id = NEW.session_id;
 
     IF session_coach != NEW.coach_id THEN
-        RAISE EXCEPTION 'Un coach ne peut demander la suppression que de ses propres sessions';
+        RAISE EXCEPTION 'A coach can only request deletion of their own sessions';
     END IF;
 
     RETURN NEW;
@@ -268,27 +275,27 @@ CREATE TRIGGER trg_coach_owns_session
     FOR EACH ROW EXECUTE FUNCTION check_coach_owns_session();
 
 -- ========================
--- DONNÉES INITIALES
+-- SEED DATA
 -- ========================
 
--- Types de session par défaut
+-- Default session types
 INSERT INTO session_types (name, description) VALUES
-    ('Yoga',       'Séance de yoga : souplesse, respiration et relaxation'),
-    ('CrossFit',   'Entraînement haute intensité mêlant cardio et renforcement'),
-    ('Pilates',    'Exercices de gainage et renforcement musculaire profond'),
-    ('Cardio',     'Activité cardiovasculaire : vélo, course, rameur'),
-    ('Musculation','Renforcement musculaire avec charges libres ou machines'),
-    ('Boxing',     'Cours de boxe : technique et cardio'),
-    ('Stretching', 'Étirements et récupération musculaire');
+    ('Yoga',        'Yoga session: flexibility, breathing and relaxation'),
+    ('CrossFit',    'High intensity training combining cardio and strength'),
+    ('Pilates',     'Core and deep muscle strengthening exercises'),
+    ('Cardio',      'Cardiovascular activity: bike, run, rowing'),
+    ('Weightlifting','Muscle strengthening with free weights or machines'),
+    ('Boxing',      'Boxing class: technique and cardio'),
+    ('Stretching',  'Stretching and muscle recovery');
 
--- Tarifs par défaut
+-- Default pricing plans
 INSERT INTO pricing (label, payment_mode, price) VALUES
-    ('Abonnement mensuel',      'MONTHLY',         29.99),
-    ('Séance à l''unité',       'PAY_PER_SESSION',   8.00),
-    ('Abonnement mensuel premium', 'MONTHLY',       49.99);
+    ('Monthly membership',         'MONTHLY',         29.99),
+    ('Pay per session',            'PAY_PER_SESSION',   8.00),
+    ('Premium monthly membership', 'MONTHLY',          49.99);
 
--- Comptes par défaut (mots de passe à changer en prod !)
--- admin123 → adminToken, password123 → coachToken
+-- Default accounts (change passwords in production!)
+-- admin password: admin123 — coach password: password123
 INSERT INTO users (email, password_hash, first_name, last_name, role) VALUES
     ('admin@fitgym.com', '$2b$12$txhIwfCXVlVUtCk.xrNexeu.UcU/w0vWBReRhu8wSQYX7ADG1ekKO', 'Admin', 'FitGym', 'ADMIN'),
     ('coach@fitgym.com', '$2b$12$ardfn3KoVHwWEUaNk5MKwewLsgf4enveTCw8DuN8YCyldtmJCoKrW', 'Coach', 'FitGym', 'COACH');
