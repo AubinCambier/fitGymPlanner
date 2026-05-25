@@ -7,7 +7,7 @@ services:
       POSTGRES_DB: fitgym
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5433:5432"
     healthcheck:
@@ -17,7 +17,7 @@ services:
       retries: 10
 
   api:
-    build: .
+    build: ./backend
     ports:
       - "3000:3000"
     environment:
