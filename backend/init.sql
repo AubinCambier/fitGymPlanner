@@ -300,4 +300,54 @@ INSERT INTO users (email, password_hash, first_name, last_name, role) VALUES
     ('admin@fitgym.com', '$2b$12$txhIwfCXVlVUtCk.xrNexeu.UcU/w0vWBReRhu8wSQYX7ADG1ekKO', 'Admin', 'FitGym', 'ADMIN'),
     ('coach@fitgym.com', '$2b$12$ardfn3KoVHwWEUaNk5MKwewLsgf4enveTCw8DuN8YCyldtmJCoKrW', 'Coach', 'FitGym', 'COACH');
 
+-- Demo sessions (coach_id=2, session_type_ids: 1=Yoga 2=CrossFit 3=Pilates 4=Cardio 5=Weightlifting 6=Boxing 7=Stretching)
+INSERT INTO sessions (title, description, session_type_id, coach_id, start_time, end_time, capacity, intensity) VALUES
+    ('Morning Yoga Flow',
+     'Start your day with a gentle flow to awaken your body and calm your mind. All levels welcome.',
+     1, 2, '2026-06-02 08:00:00+02', '2026-06-02 09:00:00+02', 15, 'LOW'),
+
+    ('CrossFit WOD — Strength & Cardio',
+     'High-intensity workout of the day combining Olympic lifting and metabolic conditioning.',
+     2, 2, '2026-06-03 07:00:00+02', '2026-06-03 08:00:00+02', 12, 'HIGH'),
+
+    ('Core Pilates',
+     'Deep core engagement and controlled movements to build stability and improve posture. Beginners welcome.',
+     3, 2, '2026-06-04 10:00:00+02', '2026-06-04 11:00:00+02', 10, 'MEDIUM'),
+
+    ('Cardio Blast',
+     'Bike, rowing and running intervals to push your cardiovascular endurance to the limit.',
+     4, 2, '2026-06-05 06:30:00+02', '2026-06-05 07:30:00+02', 20, 'HIGH'),
+
+    ('Upper Body Strength',
+     'Focused session on chest, back, shoulders and arms using free weights and cables.',
+     5, 2, '2026-06-06 11:00:00+02', '2026-06-06 12:30:00+02', 8, 'MEDIUM'),
+
+    ('Boxing Fundamentals',
+     'Learn the basics: stance, jab, cross, hooks and footwork. Great for cardio and coordination.',
+     6, 2, '2026-06-07 18:00:00+02', '2026-06-07 19:00:00+02', 10, 'MEDIUM'),
+
+    ('Power Lifting — Lower Body',
+     'Squats, deadlifts and accessory work. Technique focus with progressive overload.',
+     5, 2, '2026-06-09 17:00:00+02', '2026-06-09 18:30:00+02', 6, 'HIGH'),
+
+    ('Flexibility & Recovery',
+     'Guided stretching and myofascial release to reduce soreness and improve mobility.',
+     7, 2, '2026-06-10 19:00:00+02', '2026-06-10 19:45:00+02', 20, 'LOW'),
+
+    ('HIIT Cardio Circuit',
+     'Alternating work and rest intervals with bodyweight and light equipment. Maximum calorie burn.',
+     4, 2, '2026-06-11 07:00:00+02', '2026-06-11 08:00:00+02', 15, 'HIGH'),
+
+    ('Vinyasa Yoga',
+     'Dynamic flow linking breath to movement. Builds strength, flexibility and mindfulness.',
+     1, 2, '2026-06-12 09:00:00+02', '2026-06-12 10:00:00+02', 12, 'MEDIUM'),
+
+    ('Advanced CrossFit — Olympic Lifting',
+     'Snatches, clean & jerk and complex barbell cycling. For experienced athletes only.',
+     2, 2, '2026-06-14 18:00:00+02', '2026-06-14 19:00:00+02', 10, 'HIGH'),
+
+    ('Pilates for Beginners',
+     'Introduction to the Pilates method. Slow pace, clear cues, focus on breathing and alignment.',
+     3, 2, '2026-06-16 11:00:00+02', '2026-06-16 12:00:00+02', 12, 'LOW');
+
 COMMIT;

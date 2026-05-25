@@ -74,7 +74,7 @@ onMounted(async () => {
     const [s, t, membership, pricing] = await Promise.all([
       apiGetSessions(),
       apiGetSessionTypes(),
-      apiGetMyMembership(),
+      apiGetMyMembership().catch(() => null),
       apiGetPricing(),
     ])
     sessions.value = s

@@ -12,6 +12,7 @@ import coachRoutes from "./coachRoutes.js";
 import membershipRoutes from "./membershipRoutes.js";
 import paymentRoutes from "./paymentRoutes.js";
 import reviewRoutes from "./reviewRoutes.js";
+import adminDashboardRoutes from "./adminDashboardRoutes.js";
 // import preferenceRoutes from "./preferenceRoutes.js";
 
 export const routes = Router();
@@ -29,4 +30,5 @@ routes.use("/coach", coachRoutes);
 routes.use("/memberships", membershipRoutes);
 routes.use("/payments", paymentRoutes);
 routes.use("/reviews", reviewRoutes);
+routes.use("/admin/dashboard", adminDashboardRoutes);
 // routes.use("/preferences", preferenceRoutes);

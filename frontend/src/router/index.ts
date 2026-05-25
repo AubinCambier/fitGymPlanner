@@ -15,6 +15,7 @@ const router = createRouter({
     { path: '/coach/sessions', component: () => import('@/views/coach/CoachSessionsView.vue'), meta: { requiresAuth: true, role: 'COACH' } },
     { path: '/coach/sessions/:id', component: () => import('@/views/coach/CoachSessionDetailView.vue'), meta: { requiresAuth: true, role: 'COACH' } },
     { path: '/coach/requests', component: () => import('@/views/coach/CoachRequestsView.vue'), meta: { requiresAuth: true, role: 'COACH' } },
+    { path: '/admin/dashboard', component: () => import('@/views/admin/AdminDashboardView.vue'), meta: { requiresAuth: true, role: 'ADMIN' } },
     { path: '/admin/users', component: () => import('@/views/admin/AdminUsersView.vue'), meta: { requiresAuth: true, role: 'ADMIN' } },
     { path: '/admin/requests', component: () => import('@/views/admin/AdminRequestsView.vue'), meta: { requiresAuth: true, role: 'ADMIN' } },
     { path: '/admin/sanctions', component: () => import('@/views/admin/AdminSanctionsView.vue'), meta: { requiresAuth: true, role: 'ADMIN' } },
@@ -30,7 +31,7 @@ function getRole(): string | null {
 }
 
 function defaultHome(role: string | null): string {
-  if (role === 'ADMIN') return '/admin/users'
+  if (role === 'ADMIN') return '/admin/dashboard'
   if (role === 'COACH') return '/coach/sessions'
   return '/member/dashboard'
 }
