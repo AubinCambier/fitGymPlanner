@@ -350,4 +350,45 @@ INSERT INTO sessions (title, description, session_type_id, coach_id, start_time,
      'Introduction to the Pilates method. Slow pace, clear cues, focus on breathing and alignment.',
      3, 2, '2026-06-16 11:00:00+02', '2026-06-16 12:00:00+02', 12, 'LOW');
 
+-- Demo member account (password: password123) — id=3
+INSERT INTO users (email, password_hash, first_name, last_name, role) VALUES
+    ('member@fitgym.com', '$2b$12$ardfn3KoVHwWEUaNk5MKwewLsgf4enveTCw8DuN8YCyldtmJCoKrW', 'Alex', 'Johnson', 'MEMBER');
+
+-- Past sessions (COMPLETED) — ids 13–17
+INSERT INTO sessions (title, description, session_type_id, coach_id, start_time, end_time, capacity, intensity, status) VALUES
+    ('Morning Yoga Flow',        'Gentle flow session for mind and body.',            1, 2, '2026-01-12 08:00:00+01', '2026-01-12 09:00:00+01', 15, 'LOW',    'COMPLETED'),
+    ('CrossFit WOD — Strength',  'High intensity workout of the day.',                2, 2, '2026-01-26 07:00:00+01', '2026-01-26 08:00:00+01', 12, 'HIGH',   'COMPLETED'),
+    ('Core Pilates',             'Deep core and stability work.',                     3, 2, '2026-02-09 10:00:00+01', '2026-02-09 11:00:00+01', 10, 'MEDIUM', 'COMPLETED'),
+    ('Cardio Blast',             'High intensity cardio circuit.',                    4, 2, '2026-02-23 06:30:00+01', '2026-02-23 07:30:00+01', 20, 'HIGH',   'COMPLETED'),
+    ('Boxing Fundamentals',      'Boxing technique and cardio conditioning.',         6, 2, '2026-03-09 18:00:00+01', '2026-03-09 19:00:00+01', 10, 'MEDIUM', 'COMPLETED');
+
+-- Active monthly membership for demo member (starts May 10 → expires June 9)
+INSERT INTO memberships (member_id, pricing_id, payment_mode, status, start_date) VALUES
+    (3, 1, 'MONTHLY', 'ACTIVE', '2026-05-10');
+
+-- Bookings: 5 past sessions + 2 upcoming — ids 1–7
+INSERT INTO bookings (member_id, session_id, status) VALUES
+    (3, 13, 'CONFIRMED'),
+    (3, 14, 'CONFIRMED'),
+    (3, 15, 'CONFIRMED'),
+    (3, 16, 'CONFIRMED'),
+    (3, 17, 'CONFIRMED'),
+    (3,  1, 'CONFIRMED'),
+    (3,  3, 'CONFIRMED');
+
+-- Payment history: 4 pay-per-session + 1 membership subscription
+INSERT INTO payments (user_id, amount, description) VALUES
+    (3,  8.00, 'Session booking: Morning Yoga Flow — Jan 12'),
+    (3,  8.00, 'Session booking: CrossFit WOD — Jan 26'),
+    (3,  8.00, 'Session booking: Core Pilates — Feb 9'),
+    (3,  8.00, 'Session booking: Cardio Blast — Feb 23'),
+    (3, 29.99, 'Monthly membership subscription — May 2026');
+
+-- Reviews for 4 completed sessions (booking ids 1–4)
+INSERT INTO reviews (booking_id, member_id, coach_id, rating, comment, is_anonymous) VALUES
+    (1, 3, 2, 5, 'Amazing session! Very motivating and the flow was perfect for a Monday morning. Will definitely be back.', FALSE),
+    (2, 3, 2, 4, 'Tough but rewarding. Great intensity and good pacing throughout.', FALSE),
+    (3, 3, 2, 5, 'Loved the core work. My posture and stability have improved a lot since starting these sessions.', TRUE),
+    (4, 3, 2, 3, 'Good session but started a bit late. Would appreciate more personalized feedback.', FALSE);
+
 COMMIT;
