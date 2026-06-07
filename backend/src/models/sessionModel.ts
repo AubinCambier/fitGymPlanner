@@ -16,7 +16,7 @@ export interface Session {
 }
 
 export interface SessionWithCount extends Session {
-  participant_count: number;
+  registered_count: number;
   coach_first_name: string;
   coach_last_name: string;
 }
@@ -31,7 +31,7 @@ export interface Participant {
 
 export const sessionModel = {
   async findAll(filters: { type?: number; date?: string; coach_id?: number }): Promise<SessionWithCount[]> {
-    const conditions: string[] = [];
+    const conditions: string[] = ['s.start_time > NOW()'];
     const values: unknown[] = [];
     let idx = 1;
 
@@ -51,7 +51,7 @@ export const sessionModel = {
     const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
     const result = await pool.query<SessionWithCount>(
-      `SELECT s.*, COUNT(b.id)::int AS participant_count,
+      `SELECT s.*, COUNT(b.id)::int AS registered_count,
               u.first_name AS coach_first_name, u.last_name AS coach_last_name
        FROM sessions s
        LEFT JOIN bookings b ON b.session_id = s.id AND b.status = 'CONFIRMED'
@@ -66,7 +66,7 @@ export const sessionModel = {
 
   async findById(id: number): Promise<SessionWithCount | null> {
     const result = await pool.query<SessionWithCount>(
-      `SELECT s.*, COUNT(b.id)::int AS participant_count,
+      `SELECT s.*, COUNT(b.id)::int AS registered_count,
               u.first_name AS coach_first_name, u.last_name AS coach_last_name
        FROM sessions s
        LEFT JOIN bookings b ON b.session_id = s.id AND b.status = 'CONFIRMED'
