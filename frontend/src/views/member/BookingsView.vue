@@ -64,8 +64,9 @@ const error = ref('')
 const cancellingId = ref<number | null>(null)
 const ratingBooking = ref<Booking | null>(null)
 
-const confirmed = computed(() => bookings.value.filter(b => b.status === 'CONFIRMED'))
-const cancelled = computed(() => bookings.value.filter(b => b.status === 'CANCELLED'))
+const now = new Date()
+const confirmed = computed(() => bookings.value.filter(b => b.status === 'CONFIRMED' && new Date(b.session_start_time) > now))
+const cancelled = computed(() => bookings.value.filter(b => b.status === 'CANCELLED' && new Date(b.session_start_time) > now))
 
 const reviewMap = computed(() => {
   const map: Record<number, Review> = {}

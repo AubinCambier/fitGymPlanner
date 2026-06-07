@@ -9,6 +9,7 @@ const router = createRouter({
     { path: '/member/dashboard', component: () => import('@/views/member/DashboardView.vue'), meta: { requiresAuth: true } },
     { path: '/member/sessions', component: () => import('@/views/member/SessionsView.vue'), meta: { requiresAuth: true } },
     { path: '/member/bookings', component: () => import('@/views/member/BookingsView.vue'), meta: { requiresAuth: true } },
+    { path: '/member/schedule', component: () => import('@/views/member/ScheduleView.vue'), meta: { requiresAuth: true } },
     { path: '/member/membership', component: () => import('@/views/member/MembershipView.vue'), meta: { requiresAuth: true } },
     { path: '/member/profile', component: () => import('@/views/member/ProfileView.vue'), meta: { requiresAuth: true } },
     { path: '/member/coach/:id', component: () => import('@/views/member/MemberCoachProfileView.vue'), meta: { requiresAuth: true } },
