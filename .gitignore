@@ -17,3 +17,6 @@ bruno/environments/Local.bru
 # Logs
 *.log
 npm-debug.log*
+
+#help for the development
+docs/superpowers/
