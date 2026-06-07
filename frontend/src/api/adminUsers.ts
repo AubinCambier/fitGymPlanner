@@ -1,6 +1,6 @@
 import { authHeaders } from './auth'
 
-const BASE = 'http://localhost:3000/api/v1'
+import { BASE } from './config'
 
 async function handleResponse<T>(res: Response): Promise<T> {
   const data = await res.json()

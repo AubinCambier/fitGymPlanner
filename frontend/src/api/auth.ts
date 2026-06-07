@@ -1,6 +1,6 @@
 import type { User } from '@/stores/auth'
 
-const BASE = 'http://localhost:3000/api/v1'
+import { BASE } from './config'
 
 export function authHeaders(): HeadersInit {
   const token = localStorage.getItem('token')
